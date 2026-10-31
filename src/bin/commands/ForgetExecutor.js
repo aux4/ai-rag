@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import LlmStore from "../../lib/LlmStore.js";
 import { getEmbeddings, DEFAULT_EMBEDDINGS_TYPE } from "../../lib/Embeddings.js";
-import { ensureCompatibleEmbeddings } from "../../lib/EmbeddingsGuard.js";
+import { ensureCompatibleEmbeddings, resolveEmbeddingsConfig } from "../../lib/EmbeddingsGuard.js";
 
 export async function forgetExecutor(params) {
   const storage = params.storage;
@@ -22,8 +22,9 @@ export async function forgetExecutor(params) {
     return;
   }
 
-  const type = embeddingsConfig ? embeddingsConfig.type || DEFAULT_EMBEDDINGS_TYPE : DEFAULT_EMBEDDINGS_TYPE;
-  const config = embeddingsConfig ? embeddingsConfig.config || {} : {};
+  const resolved = resolveEmbeddingsConfig(storage, embeddingsConfig);
+  const type = resolved.type || DEFAULT_EMBEDDINGS_TYPE;
+  const config = resolved.config || {};
   ensureCompatibleEmbeddings(storage, type, config);
   const Embeddings = getEmbeddings(type);
   const embeddings = new Embeddings(config);

@@ -8,6 +8,7 @@ import crypto from "crypto";
 // ("openai", the only type that existed before this guard was added).
 const META_KEY = "__embeddingsMeta__";
 const LEGACY_TYPE = "openai";
+const DEFAULT_TYPE = "local";
 
 function stableStringify(value) {
   if (value === null || typeof value !== "object") {
@@ -47,6 +48,25 @@ export function readIdsMap(storageDir) {
   } catch {
     return {};
   }
+}
+
+/**
+ * Resolve the default embedding configuration for a store. Stores created by
+ * older ai-agent releases have indexed documents but no metadata marker and
+ * therefore used the historical OpenAI default. New stores use local
+ * EmbeddingGemma. An explicit type/config always wins.
+ */
+export function resolveEmbeddingsConfig(storageDir, requested = {}) {
+  const explicit = requested && typeof requested === "object" &&
+    (Object.prototype.hasOwnProperty.call(requested, "type") ||
+     Object.prototype.hasOwnProperty.call(requested, "config"));
+  if (explicit) {
+    return { type: requested.type || DEFAULT_TYPE, config: requested.config || {} };
+  }
+  const idsMap = readIdsMap(storageDir);
+  const hasDocs = Object.keys(idsMap).some(key => key !== META_KEY);
+  if (hasDocs && !idsMap[META_KEY]) return { type: LEGACY_TYPE, config: {} };
+  return { type: DEFAULT_TYPE, config: {} };
 }
 
 function hasIndexedDocuments(idsMap) {

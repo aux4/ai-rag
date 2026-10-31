@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import LlmStore from "../../lib/LlmStore.js";
 import { getEmbeddings, DEFAULT_EMBEDDINGS_TYPE } from "../../lib/Embeddings.js";
-import { ensureCompatibleEmbeddings, writeEmbeddingsMeta } from "../../lib/EmbeddingsGuard.js";
+import { ensureCompatibleEmbeddings, writeEmbeddingsMeta, resolveEmbeddingsConfig } from "../../lib/EmbeddingsGuard.js";
 
 const SUPPORTED_EXTENSIONS = new Set([".md", ".txt", ".pdf", ".json", ".csv", ".docx", ".pptx"]);
 
@@ -30,8 +30,9 @@ export async function addDocumentExecutor(params) {
   const docType = params.type;
   const embeddingsConfig = params.embeddings;
 
-  const type = embeddingsConfig ? embeddingsConfig.type || DEFAULT_EMBEDDINGS_TYPE : DEFAULT_EMBEDDINGS_TYPE;
-  const config = embeddingsConfig ? embeddingsConfig.config || {} : {};
+  const resolved = resolveEmbeddingsConfig(storage, embeddingsConfig);
+  const type = resolved.type || DEFAULT_EMBEDDINGS_TYPE;
+  const config = resolved.config || {};
   const meta = ensureCompatibleEmbeddings(storage, type, config);
   const Embeddings = getEmbeddings(type);
   const embeddings = new Embeddings(config);
