@@ -3,9 +3,9 @@
 // resolve on the user's platform. The package installer supplies dependencies.
 (async () => {
   const [{ addDocumentExecutor }, { searchExecutor }, { forgetExecutor }] = await Promise.all([
-    import("../../src/bin/commands/AddDocumentExecutor.js"),
-    import("../../src/bin/commands/SearchExecutor.js"),
-    import("../../src/bin/commands/ForgetExecutor.js")
+    import("./commands/AddDocumentExecutor.js"),
+    import("./commands/SearchExecutor.js"),
+    import("./commands/ForgetExecutor.js")
   ]);
   const args = process.argv.slice(2);
   const json = value => JSON.parse(value || "{}");
