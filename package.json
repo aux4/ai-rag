@@ -9,7 +9,7 @@
     "aux4-ai-rag": "package/lib/aux4-ai-rag.cjs"
   },
   "scripts": {
-    "build": "rollup -c && cd package/lib && npm install",
+    "build": "node -e \"console.log('ai-rag runtime uses platform dependencies from the package installation')\"",
     "test": "aux4 test run",
     "lint": "eslint src"
   },
