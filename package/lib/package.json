@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "index.js",
   "dependencies": {
     "@langchain/aws": "^1.0.0",
     "@langchain/classic": "^1.0.1",
