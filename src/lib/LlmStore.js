@@ -142,7 +142,7 @@ export default class LlmStore {
 
   async search(query, options = {}) {
     if (!this.store) {
-      throw new Error("No documents have been indexed yet. Please use 'aux4 ai rag learn <document>' to add documents to the vector store first.");
+      throw new Error("No documents have been indexed yet. Please use 'aux4 ai agent learn <document>' to add documents to the vector store first.");
     }
 
     const { limit: rawLimit, source } = options;

@@ -95,8 +95,8 @@ export function ensureCompatibleEmbeddings(storageDir, type, config) {
       `'${existingMeta.type}'${existingMeta.dimension ? ` (dimension ${existingMeta.dimension})` : ""}, ` +
       `but the current configuration uses type '${currentMeta.type}'${currentMeta.dimension ? ` (dimension ${currentMeta.dimension})` : ""}. ` +
       `Mixing embeddings from different models/configs in the same store produces incompatible vectors. ` +
-      `Run 'aux4 ai rag forget --storage ${storageDir}' to clear the store, then re-run ` +
-      `'aux4 ai rag learn --storage ${storageDir}' with the new embeddings configuration.`
+      `Run 'aux4 ai agent forget --storage ${storageDir}' to clear the store, then re-run ` +
+      `'aux4 ai agent learn --storage ${storageDir}' with the new embeddings configuration.`
     );
   }
 
