@@ -57,6 +57,8 @@ jobs:
           fi
           echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+      - name: Reset validation-generated working tree changes
+        run: git restore --worktree .
       - uses: aux4/action@v1
         with:
           command: publish
