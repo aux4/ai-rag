@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
+      - uses: aux4/action@v1
+        with:
+          command: lint
+          strict: 'true'
+
+  test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
+      - uses: aux4/action@v1
+        with:
+          command: lint
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
+      - uses: aux4/action@v1
+        with:
+          command: test
+          test_directory: test
+      - name: Verify clean package bootstrap and JSON output
+        run: node scripts/test-clean-runtime.mjs
+
+  test-macos:
+    needs: [lint]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
+      - uses: aux4/action@v1
+        with:
+          command: lint
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
+      - uses: aux4/action@v1
+        with:
+          command: test
+          test_directory: test
+      - name: Verify clean package bootstrap and JSON output
+        run: node scripts/test-clean-runtime.mjs

@@ -1,0 +1,66 @@
+name: Publish to Dev Hub
+
+on:
+  workflow_dispatch:
+    inputs:
+      level:
+        description: Release level (patch, minor, major)
+        required: true
+        default: patch
+        type: choice
+        options: [patch, minor, major]
+
+concurrency:
+  group: publish-package-dev
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
+      - uses: aux4/action@v1
+        with:
+          command: lint
+          strict: 'true'
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
+      - uses: aux4/action@v1
+        with:
+          command: test
+          test_directory: test
+      - name: Verify clean package bootstrap and JSON output
+        run: node scripts/test-clean-runtime.mjs
+      - name: Mint dev hub publish token
+        id: token
+        env:
+          CLIENT_ID: ${{ secrets.AUX4_DEV_PUBLISHER_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.AUX4_DEV_PUBLISHER_CLIENT_SECRET }}
+        run: |
+          set -euo pipefail
+          TOKEN=$(curl -sf -u "$CLIENT_ID:$CLIENT_SECRET" \
+            -d grant_type=client_credentials \
+            "https://dev.sso.aux4.io/token" | jq -r '.access_token // empty')
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Could not mint a dev hub publish token. Check AUX4_DEV_PUBLISHER_CLIENT_ID/SECRET."
+            exit 1
+          fi
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+      - uses: aux4/action@v1
+        with:
+          command: publish
+          level: ${{ inputs.level }}
+          registry: https://dev.api.hub.aux4.io/v1/packages
+          aux4_token: ${{ steps.token.outputs.token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
