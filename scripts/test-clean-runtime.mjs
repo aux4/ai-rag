@@ -19,6 +19,7 @@ function run(command, args, options = {}) {
 }
 
 try {
+  fs.rmSync(path.join(packageDir, "lib", "node_modules"), { recursive: true, force: true });
   const archiveDir = path.join(tempDir, "archives");
   fs.mkdirSync(archiveDir);
   run("aux4", ["aux4", "pkger", "build", ".", "--out", archiveDir], { cwd: packageDir });

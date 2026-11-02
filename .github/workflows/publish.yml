@@ -42,10 +42,9 @@ jobs:
         with:
           command: lint
           strict: 'true'
-      - uses: aux4/action@v1
-        with:
-          command: test
-          build_command: npm run build
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
+      - run: npm test
       - name: Verify clean package bootstrap and JSON output
         run: node scripts/test-clean-runtime.mjs
       - name: Mint production hub token
