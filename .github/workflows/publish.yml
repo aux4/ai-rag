@@ -72,5 +72,6 @@ jobs:
         with:
           command: publish
           level: ${{ inputs.level || 'patch' }}
+          registry: https://api.hub.aux4.io/v1/packages
           aux4_token: ${{ steps.token.outputs.token }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
