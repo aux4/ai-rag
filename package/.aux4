@@ -1,16 +1,125 @@
 {
   "scope": "aux4",
   "name": "ai-rag",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Standalone document ingestion and semantic retrieval",
-  "tags": ["ai", "rag", "search", "embeddings"],
-  "dependencies": ["aux4/embedding"],
-  "profiles": [{
-    "name": "ai:agent",
-    "commands": [
-      {"name":"learn","execute":["node ${packageDir}/lib/aux4-ai-rag.cjs learn values(storage, doc, type, embeddings)"],"help":{"text":"Learn from a document or folder","variables":[{"name":"storage","text":"Vector store directory","default":".context"},{"name":"doc","text":"Document or folder","arg":true},{"name":"type","text":"Document type override","default":""},{"name":"embeddings","text":"Embeddings config JSON","default":"{}"}]}},
-      {"name":"search","execute":["node ${packageDir}/lib/aux4-ai-rag.cjs search values(storage, format, source, limit, query, embeddings)"],"help":{"text":"Search indexed documents","variables":[{"name":"storage","text":"Vector store directory","default":".context"},{"name":"format","text":"Output format","default":"text","options":["text","json"]},{"name":"source","text":"Limit to source file","default":""},{"name":"limit","text":"Number of results","default":"1"},{"name":"query","text":"Search query","arg":true},{"name":"embeddings","text":"Embeddings config JSON","default":"{}"}]}},
-      {"name":"forget","execute":["node ${packageDir}/lib/aux4-ai-rag.cjs forget values(storage, doc, embeddings)"],"help":{"text":"Forget learned documents","variables":[{"name":"storage","text":"Vector store directory","default":".context"},{"name":"doc","text":"File or folder, or empty for all","arg":true,"default":""},{"name":"embeddings","text":"Embeddings config JSON","default":"{}"}]}}
-    ]
-  }]
+  "tags": [
+    "ai",
+    "rag",
+    "search",
+    "embeddings"
+  ],
+  "dependencies": [
+    "aux4/embedding"
+  ],
+  "profiles": [
+    {
+      "name": "ai:agent",
+      "commands": [
+        {
+          "name": "learn",
+          "execute": [
+            "node ${packageDir}/lib/aux4-ai-rag.cjs learn values(storage, doc, type, embeddings)"
+          ],
+          "help": {
+            "text": "Learn from a document or folder",
+            "variables": [
+              {
+                "name": "storage",
+                "text": "Vector store directory",
+                "default": ".context"
+              },
+              {
+                "name": "doc",
+                "text": "Document or folder",
+                "arg": true
+              },
+              {
+                "name": "type",
+                "text": "Document type override",
+                "default": ""
+              },
+              {
+                "name": "embeddings",
+                "text": "Embeddings config JSON",
+                "default": "{}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "search",
+          "execute": [
+            "node ${packageDir}/lib/aux4-ai-rag.cjs search values(storage, format, source, limit, query, embeddings)"
+          ],
+          "help": {
+            "text": "Search indexed documents",
+            "variables": [
+              {
+                "name": "storage",
+                "text": "Vector store directory",
+                "default": ".context"
+              },
+              {
+                "name": "format",
+                "text": "Output format",
+                "default": "text",
+                "options": [
+                  "text",
+                  "json"
+                ]
+              },
+              {
+                "name": "source",
+                "text": "Limit to source file",
+                "default": ""
+              },
+              {
+                "name": "limit",
+                "text": "Number of results",
+                "default": "1"
+              },
+              {
+                "name": "query",
+                "text": "Search query",
+                "arg": true
+              },
+              {
+                "name": "embeddings",
+                "text": "Embeddings config JSON",
+                "default": "{}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "forget",
+          "execute": [
+            "node ${packageDir}/lib/aux4-ai-rag.cjs forget values(storage, doc, embeddings)"
+          ],
+          "help": {
+            "text": "Forget learned documents",
+            "variables": [
+              {
+                "name": "storage",
+                "text": "Vector store directory",
+                "default": ".context"
+              },
+              {
+                "name": "doc",
+                "text": "File or folder, or empty for all",
+                "arg": true,
+                "default": ""
+              },
+              {
+                "name": "embeddings",
+                "text": "Embeddings config JSON",
+                "default": "{}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
 }
