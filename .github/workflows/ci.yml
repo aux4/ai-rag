@@ -35,8 +35,6 @@ jobs:
           node-version: '22'
       - run: npm install
       - run: npm run build
-      - name: Install test runtime dependencies for this runner
-        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: test
@@ -56,8 +54,6 @@ jobs:
           node-version: '22'
       - run: npm install
       - run: npm run build
-      - name: Install test runtime dependencies for this runner
-        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: test

@@ -25,7 +25,9 @@ export function ensureRuntime() {
   const result = spawnSync(npm, ["ci", "--omit=dev", "--no-audit", "--no-fund"], {
     cwd: runtimeDir,
     encoding: "utf8",
-    stdio: "inherit"
+    // Keep installer progress off stdout: callers may be producing machine
+    // readable JSON from a command invoked with --format json.
+    stdio: ["ignore", "ignore", "inherit"]
   });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`Could not install ai-rag runtime dependencies (npm exited ${result.status})`);
