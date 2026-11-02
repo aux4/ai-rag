@@ -175,18 +175,18 @@ export default class LlmStore {
 
     // Temporarily suppress console warnings during search
     console.warn = (...args) => {
-      const message = args.join(' ');
-      if (message.includes('is greater than the number of elements') ||
-          message.includes('setting k to')) {
+      const message = args.join(" ");
+      if (message.includes("is greater than the number of elements") ||
+          message.includes("setting k to")) {
         return; // Suppress this specific warning
       }
       originalConsoleWarn.apply(console, args);
     };
 
     console.log = (...args) => {
-      const message = args.join(' ');
-      if (message.includes('is greater than the number of elements') ||
-          message.includes('setting k to')) {
+      const message = args.join(" ");
+      if (message.includes("is greater than the number of elements") ||
+          message.includes("setting k to")) {
         return; // Suppress this specific message
       }
       originalConsoleLog.apply(console, args);

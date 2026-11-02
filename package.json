@@ -5,7 +5,7 @@
   "type": "module",
   "main": "package/lib/index.js",
   "exports": {".": "./package/lib/index.js"},
-  "scripts": {"build": "node scripts/build-rag.mjs", "test": "aux4 test run", "lint": "eslint src"},
+  "scripts": {"build": "node scripts/build-rag.mjs && npm ci --prefix package/lib", "test": "aux4 test run", "lint": "eslint src"},
   "dependencies": {
     "@langchain/aws": "^1.0.0",
     "@langchain/classic": "^1.0.1",

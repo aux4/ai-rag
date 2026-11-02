@@ -30,7 +30,7 @@ export class DatabricksEmbeddings extends Embeddings {
     }
 
     // Build the endpoint URL
-    this.baseUrl = `${this.host.replace(/\/$/, '')}/serving-endpoints/${this.model}`;
+    this.baseUrl = `${this.host.replace(/\/$/, "")}/serving-endpoints/${this.model}`;
   }
 
   /**
@@ -81,7 +81,7 @@ export class DatabricksEmbeddings extends Embeddings {
       return embeddings;
     } catch (error) {
       // Add context to the error
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      if (error.name === "TypeError" && error.message.includes("fetch")) {
         throw new Error(`Network error connecting to Databricks embeddings endpoint: ${error.message}`);
       }
       throw error;
