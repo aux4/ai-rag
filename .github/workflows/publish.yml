@@ -46,6 +46,8 @@ jobs:
         with:
           command: test
           build_command: npm run build
+      - name: Verify clean package bootstrap and JSON output
+        run: node scripts/test-clean-runtime.mjs
       - name: Mint production hub token
         id: token
         env:

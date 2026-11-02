@@ -38,11 +38,8 @@ jobs:
       - uses: aux4/action@v1
         with:
           command: test
-      - name: Verify fresh runtime bootstrap
-        run: |
-          node -e 'require("node:fs").rmSync("package/lib/node_modules", { recursive: true, force: true })'
-          output=$(node package/lib/aux4-ai-rag.cjs invalid 2>&1) && exit 1
-          echo "$output" | grep -F 'Usage: aux4-ai-rag'
+      - name: Verify clean package bootstrap and JSON output
+        run: node scripts/test-clean-runtime.mjs
 
   test-macos:
     needs: [lint]
@@ -57,8 +54,5 @@ jobs:
       - uses: aux4/action@v1
         with:
           command: test
-      - name: Verify fresh runtime bootstrap
-        run: |
-          node -e 'require("node:fs").rmSync("package/lib/node_modules", { recursive: true, force: true })'
-          output=$(node package/lib/aux4-ai-rag.cjs invalid 2>&1) && exit 1
-          echo "$output" | grep -F 'Usage: aux4-ai-rag'
+      - name: Verify clean package bootstrap and JSON output
+        run: node scripts/test-clean-runtime.mjs
