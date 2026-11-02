@@ -34,7 +34,35 @@ jobs:
         with:
           node-version: '22'
       - run: npm install
+      - run: npm run build
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: test
-          build_command: npm run build
+      - name: Verify fresh runtime bootstrap
+        run: |
+          node -e 'require("node:fs").rmSync("package/lib/node_modules", { recursive: true, force: true })'
+          output=$(node package/lib/aux4-ai-rag.cjs invalid 2>&1) && exit 1
+          echo "$output" | grep -F 'Usage: aux4-ai-rag'
+
+  test-macos:
+    needs: [lint]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
+      - uses: aux4/action@v1
+        with:
+          command: test
+      - name: Verify fresh runtime bootstrap
+        run: |
+          node -e 'require("node:fs").rmSync("package/lib/node_modules", { recursive: true, force: true })'
+          output=$(node package/lib/aux4-ai-rag.cjs invalid 2>&1) && exit 1
+          echo "$output" | grep -F 'Usage: aux4-ai-rag'

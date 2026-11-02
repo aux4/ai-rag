@@ -16,3 +16,8 @@ without metadata continue to use the OpenAI embedding default.
 
 The JavaScript library exports `LlmStore`, embedding factories, compatibility
 guards, and command executors from `src/index.js`.
+
+The package archive includes the locked runtime manifest but omits native
+`node_modules`. On first use, the CLI installs those dependencies on the target
+machine so FAISS uses a binary built for that machine's OS and architecture.
+Programmatic imports perform the same setup before exporting the API.

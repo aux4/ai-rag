@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Small runtime bridge kept unbundled so native FAISS and embedding dependencies
-// resolve on the user's platform. The package installer supplies dependencies.
+
 (async () => {
+  const { ensureRuntime } = await import("../lib/ensureRuntime.js");
+  ensureRuntime();
   const [{ addDocumentExecutor }, { searchExecutor }, { forgetExecutor }] = await Promise.all([
     import("./commands/AddDocumentExecutor.js"),
     import("./commands/SearchExecutor.js"),
@@ -15,4 +16,7 @@
     else if (args[0] === "forget") await forgetExecutor({ storage: args[1] || ".context", doc: args[2] || "", embeddings: json(args[3]) });
     else { console.error("Usage: aux4-ai-rag <learn|search|forget> ..."); process.exitCode = 1; }
   } catch (error) { console.error(error.message); process.exitCode = 1; }
-})();
+})().catch(error => {
+  console.error(error.message);
+  process.exitCode = 1;
+});

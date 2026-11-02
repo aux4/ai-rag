@@ -29,6 +29,8 @@ jobs:
           node-version: '22'
       - run: npm install
       - run: npm run build
+      - name: Install test runtime dependencies for this runner
+        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: lint
@@ -37,6 +39,8 @@ jobs:
         with:
           command: test
           build_command: npm run build
+      - name: Remove runner-specific native binaries before packaging
+        run: node -e 'require("node:fs").rmSync("package/lib/node_modules", { recursive: true, force: true })'
       - name: Mint dev hub publish token
         id: token
         env:
