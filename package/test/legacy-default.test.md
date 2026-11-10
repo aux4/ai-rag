@@ -6,7 +6,7 @@ historical OpenAI default when no embedding configuration is supplied.
 ```execute
 mkdir -p .legacy-context
 printf '{"legacy.txt":{"chunks":["chunk-1"]}}' > .legacy-context/ids.json
-node --input-type=module -e 'import {resolveEmbeddingsConfig} from "../lib/EmbeddingsGuard.js"; console.log(JSON.stringify(resolveEmbeddingsConfig(".legacy-context", {})))'
+node legacy-default-check.cjs .legacy-context
 ```
 
 ```expect

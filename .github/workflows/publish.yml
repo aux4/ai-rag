@@ -48,13 +48,14 @@ jobs:
         with:
           node-version: '22'
       - run: npm install
+      # Rollup-bundles the CLI and the programmatic API to package/lib, then installs
+      # faiss-node (the only native runtime dependency) into package/lib/node_modules --
+      # that tree ships inside the published archive (same model as aux4/ai-agent).
       - run: npm run build
       - uses: aux4/action@v1
         with:
           command: lint
           strict: 'true'
-      - name: Install test runtime dependencies for this runner
-        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: test

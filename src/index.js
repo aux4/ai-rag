@@ -1,19 +1,19 @@
-import { ensureRuntime } from "./lib/ensureRuntime.js";
+import LlmStore from "./lib/LlmStore.js";
+import { getEmbeddings, DEFAULT_EMBEDDINGS_TYPE } from "./lib/Embeddings.js";
+import { ensureCompatibleEmbeddings, buildEmbeddingsMeta, writeEmbeddingsMeta, resolveEmbeddingsConfig } from "./lib/EmbeddingsGuard.js";
+import { addDocumentExecutor } from "./bin/commands/AddDocumentExecutor.js";
+import { searchExecutor } from "./bin/commands/SearchExecutor.js";
+import { forgetExecutor } from "./bin/commands/ForgetExecutor.js";
 
-await ensureRuntime();
-
-const [store, embeddings, guards, add, search, forget] = await Promise.all([
-  import("./lib/LlmStore.js"),
-  import("./lib/Embeddings.js"),
-  import("./lib/EmbeddingsGuard.js"),
-  import("./bin/commands/AddDocumentExecutor.js"),
-  import("./bin/commands/SearchExecutor.js"),
-  import("./bin/commands/ForgetExecutor.js")
-]);
-
-export const LlmStore = store.default;
-export const { getEmbeddings, DEFAULT_EMBEDDINGS_TYPE } = embeddings;
-export const { ensureCompatibleEmbeddings, buildEmbeddingsMeta, writeEmbeddingsMeta, resolveEmbeddingsConfig } = guards;
-export const { addDocumentExecutor } = add;
-export const { searchExecutor } = search;
-export const { forgetExecutor } = forget;
+export {
+  LlmStore,
+  getEmbeddings,
+  DEFAULT_EMBEDDINGS_TYPE,
+  ensureCompatibleEmbeddings,
+  buildEmbeddingsMeta,
+  writeEmbeddingsMeta,
+  resolveEmbeddingsConfig,
+  addDocumentExecutor,
+  searchExecutor,
+  forgetExecutor
+};
