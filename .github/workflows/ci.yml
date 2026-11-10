@@ -5,6 +5,7 @@ on:
   push:
     branches-ignore:
       - main
+      - dev
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -30,16 +31,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      # faiss-node (package/lib runtime dep) compiles from source when its prebuilt binary
+      # can't be downloaded or doesn't match the runner's Node ABI; that build needs BLAS/LAPACK.
+      - name: Install BLAS/LAPACK for faiss-node
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libopenblas-dev liblapack-dev
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
       - run: npm install
+      # Rollup-bundles the CLI and the programmatic API to package/lib, then installs
+      # faiss-node (the only native runtime dependency) into package/lib/node_modules.
       - run: npm run build
       - uses: aux4/action@v1
         with:
           command: lint
-      - name: Install test runtime dependencies for this runner
-        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: test
@@ -60,8 +65,6 @@ jobs:
       - uses: aux4/action@v1
         with:
           command: lint
-      - name: Install test runtime dependencies for this runner
-        run: npm ci --prefix package/lib
       - uses: aux4/action@v1
         with:
           command: test

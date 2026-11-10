@@ -11,6 +11,11 @@ import { LocalEmbeddings } from "./LocalEmbeddings.js";
 // "local" runs fully offline (aux4/embedding, EmbeddingGemma 2 on CPU) -- no API key, no network.
 export const DEFAULT_EMBEDDINGS_TYPE = "local";
 
+// "openai" stays wired because legacy FAISS stores with no recorded embeddings metadata are
+// treated as the old default "openai" (see EmbeddingsGuard.js). Now that the CLI and the
+// programmatic API are each bundled to a single file (rollup), the rest of the provider SDKs
+// (bedrock/cohere/mistral/ollama/vertex) bundle cheaply enough to keep wired in too -- see
+// RELEASE.md for the measured zip-size impact.
 const EMBEDDINGS = {
   local: LocalEmbeddings,
   openai: OpenAIEmbeddings,

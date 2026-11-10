@@ -2,7 +2,7 @@
   "scope": "aux4",
   "name": "ai-rag",
   "repository": "public",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "Standalone document ingestion and semantic retrieval",
   "tags": [
     "ai",
